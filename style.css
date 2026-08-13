@@ -173,7 +173,7 @@ nav li.logo img {
   background-color: #2b1055;
 }
 
-/* --- Brands + history section --- */
+
 .brands-section {
   display: grid;
   grid-template-columns: 1fr 1fr 1.4fr;
@@ -199,6 +199,16 @@ nav li.logo img {
   padding: 40px 20px;
   border-radius: 4px;
   height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.brand-box:hover {
+  background-color: #3d1a75;
 }
 
 .history-text {
@@ -219,4 +229,47 @@ nav li.logo img {
   font-size: 18px;
   line-height: 1.7;
   margin: 0;
+}
+
+.car-page {
+  display: block;
+  height: auto;
+  padding: 30px 40px;
+}
+
+.car-title {
+  display: block;
+  height: auto;
+  color: white;
+  text-align: center;
+  font-size: 48px;
+  margin: 0 0 30px 0;
+}
+
+.car-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  height: auto;
+}
+
+.car-col {
+  display: block;
+  height: auto;
+}
+
+.car-col p {
+  color: white;
+  font-size: 18px;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0 0 25px 0;
+}
+
+.car-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 20px;
 }
