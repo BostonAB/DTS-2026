@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marketplace | The Car Yard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&family=Archivo+Black&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+body {
+  font-family: 'Archivo Black';
+  font-size: 22px;
+}
+</style>
+</head>
+<body class="market-page">
+
+<nav>
+  <ul>
+    <li><a href="index.html"><img src="assets/Logo.jpg" alt="The Car Yard home" style="width:110px;height:100px;"></a></li>
+    <li><a href="brands.html">Car Brands</a></li>
+    <li><a href="market.html">Marketplace</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+    <li><a href="news.html">News</a></li>
+  </ul>
+</nav>
+
+<header class="market-hero">
+  <h1>Find your next car</h1>
+  <p>Bid at auction, buy it now, or contact a seller directly.</p>
+
+  <form class="search-bar" id="searchForm" role="search">
+    <select id="searchCategory" aria-label="Category">
+      <option value="all">All makes</option>
+      <option>Dodge</option>
+      <option>Ford</option>
+      <option>Lamborghini</option>
+      <option>Toyota</option>
+      <option>Nissan</option>
+      <option>Holden</option>
+    </select>
+    <input type="search" id="searchInput" placeholder="Search by make, model or keyword" aria-label="Search listings">
+    <button type="submit">Search</button>
+  </form>
+</header>
+
+<section class="shortcuts" aria-label="Quick filters">
+  <button class="shortcut" data-quick="ending" aria-pressed="false">
+    <strong>Ending soon</strong>
+    <span>Auctions closing in the next 24 hours</span>
+  </button>
+  <button class="shortcut" data-quick="buynow" aria-pressed="false">
+    <strong>Buy Now</strong>
+    <span>Skip the bidding, drive away today</span>
+  </button>
+  <button class="shortcut" data-quick="budget" aria-pressed="false">
+    <strong>Under $20,000</strong>
+    <span>Solid cars for a smaller budget</span>
+  </button>
+  <button class="shortcut" data-quick="watched" aria-pressed="false">
+    <strong>My watchlist</strong>
+    <span id="watchCount">0 cars saved</span>
+  </button>
+</section>
+
+<section class="market-layout">
+
+  <button class="filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="filters">Show filters</button>
+
+  <aside class="filters" id="filters" aria-label="Filters">
+    <h2>Filters</h2>
+
+    <fieldset class="filter-group">
+      <legend>Listing type</legend>
+      <label><input type="checkbox" name="type" value="auction" checked> Auction</label>
+      <label><input type="checkbox" name="type" value="buynow" checked> Buy Now</label>
+      <label><input type="checkbox" name="type" value="classified" checked> Classified</label>
+    </fieldset>
+
+    <fieldset class="filter-group">
+      <legend>Maximum price</legend>
+      <output class="range-readout" id="priceReadout" for="priceRange">$300,000</output>
+      <input type="range" id="priceRange" min="5000" max="300000" step="5000" value="300000" aria-label="Maximum price">
+    </fieldset>
+
+    <fieldset class="filter-group">
+      <legend>Newest from year</legend>
+      <select id="yearSelect" aria-label="Minimum year">
+        <option value="0">Any year</option>
+        <option value="2020">2020 or newer</option>
+        <option value="2015">2015 or newer</option>
+        <option value="2010">2010 or newer</option>
+        <option value="2000">2000 or newer</option>
+      </select>
+    </fieldset>
+
+    <fieldset class="filter-group">
+      <legend>Region</legend>
+      <select id="regionSelect" aria-label="Region">
+        <option value="all">All of New Zealand</option>
+        <option>Auckland</option>
+        <option>Waikato</option>
+        <option>Wellington</option>
+        <option>Canterbury</option>
+        <option>Otago</option>
+      </select>
+    </fieldset>
+
+    <fieldset class="filter-group">
+      <legend>Seller rating</legend>
+      <label><input type="checkbox" id="topSeller"> 4 stars and up</label>
+    </fieldset>
+
+    <button class="reset-btn" id="resetBtn" type="button">Clear all filters</button>
+  </aside>
+
+  <section aria-live="polite">
+    <header class="results-bar">
+      <section>
+        <h2>Cars for sale</h2>
+        <p id="resultCount">Loading listings</p>
+      </section>
+      <label class="sort-control">Sort by
+        <select id="sortSelect">
+          <option value="ending">Ending soonest</option>
+          <option value="priceLow">Price: low to high</option>
+          <option value="priceHigh">Price: high to low</option>
+          <option value="yearNew">Newest year</option>
+          <option value="kmLow">Lowest kilometres</option>
+        </select>
+      </label>
+    </header>
+
+    <section class="results-grid" id="results"></section>
+  </section>
+</section>
+
+<footer>
+  <p>&copy; 2026 The Car Yard. All rights reserved.</p>
+</footer>
+
+<p class="toast" id="toast" role="status"></p>
+
+<script>
+/* ------------------------------------------------------------
+   Sample listings. Swap these for real data (or a database)
+   later. `hours` = hours until an auction closes.
+   `img` can be any of your images in /assets.
+------------------------------------------------------------ */
+const listings = [
+  { id: 1,  title: "2018 Dodge Challenger R/T Scat Pack", make: "Dodge", year: 2018, km: 42500, type: "auction", price: 38500, bids: 14, hours: 5,   region: "Auckland",   seller: "Pace Motors",      rating: 4.8, img: "assets/dodge.jpg" },
+  { id: 2,  title: "1969 Ford Mustang Fastback 302",       make: "Ford", year: 1969, km: 88000, type: "auction", price: 61000, bids: 27, hours: 20,  region: "Canterbury", seller: "Classic Garage",   rating: 4.9, img: "assets/mustang.jpg" },
+  { id: 3,  title: "2016 Lamborghini Huracán LP610-4",    make: "Lamborghini", year: 2016, km: 21000, type: "classified", price: 249000, region: "Auckland", seller: "Prestige Imports", rating: 4.7, img: "assets/lamborghini.jpg" },
+  { id: 4,  title: "2021 Ford Mustang GT Fastback",        make: "Ford", year: 2021, km: 18400, type: "buynow", price: 72900, region: "Wellington", seller: "Capital Cars",     rating: 4.5, img: "assets/mustang.jpg" },
+  { id: 5,  title: "2014 Dodge Charger SRT8",              make: "Dodge", year: 2014, km: 96000, type: "auction", price: 22800, bids: 9, hours: 47,   region: "Waikato",    seller: "Hamilton Muscle",  rating: 4.2, img: "assets/dodge.jpg", buyNow: 29500 },
+  { id: 6,  title: "2019 Toyota 86 GT Manual",             make: "Toyota", year: 2019, km: 51000, type: "buynow", price: 31990, region: "Otago",     seller: "Southern Autos",   rating: 4.6, img: "assets/mustang.jpg" },
+  { id: 7,  title: "2008 Nissan Skyline GT-R R35",         make: "Nissan", year: 2008, km: 74000, type: "auction", price: 54000, bids: 21, hours: 2,  region: "Auckland",   seller: "Import Direct",    rating: 4.4, img: "assets/lamborghini.jpg" },
+  { id: 8,  title: "2012 Holden Commodore SS-V Redline",   make: "Holden", year: 2012, km: 118000, type: "classified", price: 17500, region: "Canterbury", seller: "Private seller", rating: 3.9, img: "assets/dodge.jpg" },
+  { id: 9,  title: "2011 Lamborghini Gallardo LP560-4",    make: "Lamborghini", year: 2011, km: 33000, type: "auction", price: 171000, bids: 6, hours: 70, region: "Wellington", seller: "Prestige Imports", rating: 4.7, img: "assets/lamborghini.jpg" },
+  { id: 10, title: "2005 Ford Mustang GT V8 Manual",       make: "Ford", year: 2005, km: 134000, type: "buynow", price: 15990, region: "Waikato",    seller: "Hamilton Muscle",  rating: 4.2, img: "assets/mustang.jpg" },
+  { id: 11, title: "2017 Toyota Supra A90 Concept Import", make: "Toyota", year: 2017, km: 12000, type: "auction", price: 19800, bids: 3, hours: 33, region: "Otago",     seller: "Southern Autos",   rating: 4.6, img: "assets/dodge.jpg" },
+  { id: 12, title: "2022 Dodge Durango SRT 392",           make: "Dodge", year: 2022, km: 9800,  type: "classified", price: 118000, region: "Auckland", seller: "Pace Motors",      rating: 4.8, img: "assets/dodge.jpg" }
+];
+
+const now = Date.now();
+listings.forEach(l => { if (l.hours) l.endsAt = now + l.hours * 3600 * 1000; });
+
+/* ---------- State ---------- */
+const state = {
+  keyword: "",
+  make: "all",
+  types: ["auction", "buynow", "classified"],
+  maxPrice: 300000,
+  minYear: 0,
+  region: "all",
+  topSeller: false,
+  sort: "ending",
+  quick: null,
+  watched: new Set()
+};
+
+const $ = id => document.getElementById(id);
+const fmtMoney = n => "$" + n.toLocaleString("en-NZ");
+const fmtKm = n => n.toLocaleString("en-NZ") + " km";
+
+function stars(rating) {
+  const full = Math.round(rating);
+  return "★".repeat(full) + "☆".repeat(5 - full);
+}
+
+function timeLeft(endsAt) {
+  const ms = endsAt - Date.now();
+  if (ms <= 0) return "Closed";
+  const s = Math.floor(ms / 1000);
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  if (d >= 1) return d + "d " + h + "h";
+  if (h >= 1) return h + "h " + m + "m";
+  return m + "m " + String(sec).padStart(2, "0") + "s";
+}
+
+/* ---------- Filtering and sorting ---------- */
+function getVisible() {
+  const kw = state.keyword.trim().toLowerCase();
+
+  let list = listings.filter(l => {
+    if (state.make !== "all" && l.make !== state.make) return false;
+    if (kw && !(l.title + " " + l.make).toLowerCase().includes(kw)) return false;
+    if (!state.types.includes(l.type)) return false;
+    if (l.price > state.maxPrice) return false;
+    if (l.year < state.minYear) return false;
+    if (state.region !== "all" && l.region !== state.region) return false;
+    if (state.topSeller && l.rating < 4) return false;
+    if (state.quick === "ending" && !(l.type === "auction" && l.hours <= 24)) return false;
+    if (state.quick === "buynow" && !(l.type === "buynow" || l.buyNow)) return false;
+    if (state.quick === "budget" && l.price >= 20000) return false;
+    if (state.quick === "watched" && !state.watched.has(l.id)) return false;
+    return true;
+  });
+
+  const sorters = {
+    ending:    (a, b) => (a.endsAt || Infinity) - (b.endsAt || Infinity),
+    priceLow:  (a, b) => a.price - b.price,
+    priceHigh: (a, b) => b.price - a.price,
+    yearNew:   (a, b) => b.year - a.year,
+    kmLow:     (a, b) => a.km - b.km
+  };
+  return list.sort(sorters[state.sort]);
+}
+
+/* ---------- Rendering ---------- */
+function cardHTML(l) {
+  const typeLabel = { auction: "Auction", buynow: "Buy Now", classified: "Classified" }[l.type];
+  const watched = state.watched.has(l.id);
+
+  let priceHTML = "";
+  let footLeft = "";
+  let action = "";
+
+  if (l.type === "auction") {
+    priceHTML = `<span class="price-label">Current bid &middot; ${l.bids} bids</span>
+                 <span class="price">${fmtMoney(l.price)}</span>` +
+                (l.buyNow ? `<span class="also-buynow">Or Buy Now for <strong>${fmtMoney(l.buyNow)}</strong></span>` : "");
+    footLeft = `<span class="countdown" data-ends="${l.endsAt}">${timeLeft(l.endsAt)}</span>`;
+    action = `<button class="card-action" data-action="bid" data-id="${l.id}">Place a bid</button>`;
+  } else if (l.type === "buynow") {
+    priceHTML = `<span class="price-label">Buy Now price</span>
+                 <span class="price">${fmtMoney(l.price)}</span>`;
+    footLeft = `<span>Ready to drive away</span>`;
+    action = `<button class="card-action" data-action="buy" data-id="${l.id}">Buy now</button>`;
+  } else {
+    priceHTML = `<span class="price-label">Asking price</span>
+                 <span class="price">${fmtMoney(l.price)}</span>`;
+    footLeft = `<span>Open to offers</span>`;
+    action = `<button class="card-action alt" data-action="contact" data-id="${l.id}">Contact seller</button>`;
+  }
+
+  return `
+  <article class="card">
+    <figure>
+      <img src="${l.img}" alt="${l.title}" loading="lazy">
+      <span class="badge ${l.type}">${typeLabel}</span>
+      <button class="watch-btn" data-action="watch" data-id="${l.id}"
+              aria-pressed="${watched}" aria-label="${watched ? "Remove from" : "Add to"} watchlist: ${l.title}">${watched ? "♥" : "♡"}</button>
+    </figure>
+    <section class="card-body">
+      <h3><a href="#">${l.title}</a></h3>
+      <p class="specs">${l.year} &middot; ${fmtKm(l.km)}</p>
+      <p class="seller"><span class="stars" aria-hidden="true">${stars(l.rating)}</span>
+        <span>${l.rating.toFixed(1)} &middot; ${l.seller}</span></p>
+      <section class="price-block">
+        ${priceHTML}
+        <section class="card-foot">
+          ${footLeft}
+          <span class="location">${l.region}</span>
+        </section>
+        ${action}
+      </section>
+    </section>
+  </article>`;
+}
+
+function render() {
+  const list = getVisible();
+  const grid = $("results");
+
+  $("resultCount").textContent =
+    list.length === 1 ? "1 car found" : list.length + " cars found";
+
+  if (!list.length) {
+    grid.innerHTML = `
+      <article class="empty-state">
+        <h3>No cars match those filters</h3>
+        <p>Try a higher maximum price, a different region, or clear the filters to see everything.</p>
+        <button type="button" data-action="reset">Clear all filters</button>
+      </article>`;
+  } else {
+    grid.innerHTML = list.map(cardHTML).join("");
+  }
+
+  $("watchCount").textContent =
+    state.watched.size + (state.watched.size === 1 ? " car saved" : " cars saved");
+}
+
+/* ---------- Toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+/* ---------- Events ---------- */
+$("searchForm").addEventListener("submit", e => {
+  e.preventDefault();
+  state.keyword = $("searchInput").value;
+  state.make = $("searchCategory").value;
+  render();
+});
+
+$("searchInput").addEventListener("input", e => { state.keyword = e.target.value; render(); });
+$("searchCategory").addEventListener("change", e => { state.make = e.target.value; render(); });
+
+document.querySelectorAll('input[name="type"]').forEach(box => {
+  box.addEventListener("change", () => {
+    state.types = [...document.querySelectorAll('input[name="type"]:checked')].map(b => b.value);
+    render();
+  });
+});
+
+$("priceRange").addEventListener("input", e => {
+  state.maxPrice = Number(e.target.value);
+  $("priceReadout").textContent = fmtMoney(state.maxPrice);
+  render();
+});
+
+$("yearSelect").addEventListener("change", e => { state.minYear = Number(e.target.value); render(); });
+$("regionSelect").addEventListener("change", e => { state.region = e.target.value; render(); });
+$("topSeller").addEventListener("change", e => { state.topSeller = e.target.checked; render(); });
+$("sortSelect").addEventListener("change", e => { state.sort = e.target.value; render(); });
+
+document.querySelectorAll(".shortcut").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const q = btn.dataset.quick;
+    state.quick = state.quick === q ? null : q;
+    document.querySelectorAll(".shortcut").forEach(b =>
+      b.setAttribute("aria-pressed", String(b.dataset.quick === state.quick)));
+    render();
+  });
+});
+
+function resetAll() {
+  Object.assign(state, {
+    keyword: "", make: "all", types: ["auction", "buynow", "classified"],
+    maxPrice: 300000, minYear: 0, region: "all", topSeller: false,
+    sort: "ending", quick: null
+  });
+  $("searchInput").value = "";
+  $("searchCategory").value = "all";
+  $("priceRange").value = 300000;
+  $("priceReadout").textContent = fmtMoney(300000);
+  $("yearSelect").value = "0";
+  $("regionSelect").value = "all";
+  $("topSeller").checked = false;
+  $("sortSelect").value = "ending";
+  document.querySelectorAll('input[name="type"]').forEach(b => b.checked = true);
+  document.querySelectorAll(".shortcut").forEach(b => b.setAttribute("aria-pressed", "false"));
+  render();
+}
+$("resetBtn").addEventListener("click", resetAll);
+
+/* Card buttons (event delegation) */
+$("results").addEventListener("click", e => {
+  const btn = e.target.closest("[data-action]");
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const id = Number(btn.dataset.id);
+  const car = listings.find(l => l.id === id);
+
+  if (action === "reset") return resetAll();
+
+  if (action === "watch") {
+    if (state.watched.has(id)) {
+      state.watched.delete(id);
+      toast("Removed from your watchlist");
+    } else {
+      state.watched.add(id);
+      toast("Added to your watchlist");
+    }
+    render();
+    return;
+  }
+
+  if (action === "bid") {
+    const increment = car.price >= 100000 ? 1000 : 250;
+    car.price += increment;
+    car.bids += 1;
+    toast("Bid placed: " + fmtMoney(car.price));
+    render();
+    return;
+  }
+
+  if (action === "buy") {
+    toast("Buy Now started for " + car.title);
+    return;
+  }
+
+  if (action === "contact") {
+    toast("Message sent to " + car.seller);
+  }
+});
+
+/* Mobile filter toggle */
+$("filterToggle").addEventListener("click", () => {
+  const panel = $("filters");
+  const open = panel.classList.toggle("open");
+  $("filterToggle").setAttribute("aria-expanded", String(open));
+  $("filterToggle").textContent = open ? "Hide filters" : "Show filters";
+});
+
+/* Live countdowns */
+setInterval(() => {
+  document.querySelectorAll(".countdown").forEach(el => {
+    const ends = Number(el.dataset.ends);
+    el.textContent = timeLeft(ends);
+    el.classList.toggle("urgent", ends - Date.now() < 3600 * 1000);
+  });
+}, 1000);
+
+render();
+</script>
+
+</body>
+</html>
