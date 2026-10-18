@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About Us | The Car Yard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;700&family=Archivo+Black&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+body {
+  font-family: 'Archivo Black';
+  font-size: 22px;
+}
+
+/* About page additions */
+.about-intro {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  color: white;
+  text-align: center;
+  font-size: 20px;
+  line-height: 1.6;
+}
+.car-col h2 {
+  color: white;
+  font-size: 28px;
+  text-align: center;
+  margin: 0 0 16px 0;
+}
+.car-col p {
+  font-family: 'Archivo', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+}
+.values {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 10px 40px 40px;
+}
+.values .shortcut {
+  cursor: default;
+  background: var(--purple);
+}
+.values .shortcut span {
+  font-family: 'Archivo', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.values-title {
+  color: white;
+  text-align: center;
+  font-size: 32px;
+  margin: 10px 0 20px;
+}
+.cta-row {
+  text-align: center;
+  padding: 0 40px 50px;
+}
+.cta-row a {
+  display: inline-block;
+  margin: 6px;
+  padding: 14px 28px;
+  background: var(--orange);
+  color: white;
+  font-family: var(--display);
+  font-size: 18px;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.cta-row a:hover { background: var(--orange-dark); }
+.cta-row a.alt { background: var(--purple); }
+.cta-row a.alt:hover { background: var(--purple-light); }
+
+@media (max-width: 1000px) {
+  .values { grid-template-columns: repeat(2, 1fr); }
+  .car-detail-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .values { grid-template-columns: 1fr; padding-left: 16px; padding-right: 16px; }
+  .car-page { padding: 24px 16px; }
+  .car-title { font-size: 34px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <ul>
+    <li class="logo"><a href="index.html"><img src="assets/Logo.jpg" alt="The Car Yard logo"></a></li>
+    <li><a href="brands.html">Car Brands</a></li>
+    <li><a href="market.html">Marketplace</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+    <li><a href="news.html">News</a></li>
+  </ul>
+</nav>
+
+<main class="car-page market-page">
+  <h1 class="car-title">About The Car Yard</h1>
+
+  <p class="about-intro">
+    The Car Yard is a home for people who love cars. Browse the brands, follow the news,
+    and find your next ride in our marketplace.
+  </p>
+
+  <section class="car-detail-grid">
+    <section class="car-col">
+      <h2>Our story</h2>
+      <p>
+        The Car Yard started with a simple idea: car fans should have one place to read about
+        the machines they love and buy and sell them with confidence. What began as a small
+        collection of favourite models has grown into a full guide to brands, history and
+        listings.
+      </p>
+      <p>
+        From early Mercedes and curved-dash Oldsmobiles to today's electric newcomers, we
+        believe every car has a story worth telling.
+      </p>
+    </section>
+
+    <section class="car-col">
+      <h2>What we do</h2>
+      <p>
+        Our brand pages cover the history and highlights of the manufacturers behind the
+        cars. Our news page tracks the latest reveals, launches and sales figures from the
+        auto world.
+      </p>
+      <p>
+        Our marketplace lets you search listings, filter by what matters to you, and
+        contact sellers directly, whether you want a daily driver or a weekend project.
+      </p>
+    </section>
+  </section>
+</main>
+
+<section class="market-page">
+  <h2 class="values-title">What we stand for</h2>
+  <section class="values">
+    <article class="shortcut">
+      <strong>Passion</strong>
+      <span>We are enthusiasts first, and it shows in everything we publish.</span>
+    </article>
+    <article class="shortcut">
+      <strong>Honesty</strong>
+      <span>Clear listings and accurate information, with no surprises.</span>
+    </article>
+    <article class="shortcut">
+      <strong>Community</strong>
+      <span>Buyers, sellers and fans sharing one welcoming space.</span>
+    </article>
+    <article class="shortcut">
+      <strong>Curiosity</strong>
+      <span>We follow where the industry is heading, not just where it has been.</span>
+    </article>
+  </section>
+
+  <p class="cta-row">
+    <a href="market.html">Visit the marketplace</a>
+    <a class="alt" href="contact.html">Get in touch</a>
+  </p>
+</section>
+
+<footer>
+  <p>&copy; 2026 The Car Yard. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
